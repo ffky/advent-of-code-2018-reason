@@ -6,13 +6,13 @@ let parse = input =>
   ->Belt.List.keep(x => x !== "")
   ->Belt.List.map(x => x |> Js.String.replace("+", "") |> int_of_string);
 
-let rec sum = l =>
+let rec part1 = l =>
   switch (l) {
   | [] => 0
-  | [h, ...t] => h + sum(t)
+  | [h, ...t] => h + part1(t)
   };
 
-let duplicateSum = l => {
+let part2 = l => {
   let rec aux = (l2, acc, set) =>
     switch (l2) {
     | [] => aux(l, acc, set)

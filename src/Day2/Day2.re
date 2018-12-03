@@ -9,7 +9,9 @@ module IdComparable =
     let cmp = compare;
   });
 
-let checksum = l => {
+let charList = l => l->Js.String.split("", _)->Belt.List.fromArray;
+
+let part1 = l => {
   let rec charCountMap = (charList, map) =>
     switch (charList) {
     | [] => map
@@ -26,13 +28,12 @@ let checksum = l => {
     switch (l) {
     | [] => (twoCount, threeCount)
     | [h, ...t] =>
-      let charList = h->Js.String.split("", _)->Belt.List.fromArray;
       let (twos, threes) =
-        charCountMap(charList, Belt.Map.make(~id=(module IdComparable)))
+        charCountMap(charList(h), Belt.Map.make(~id=(module IdComparable)))
         ->Belt.Map.reduce((0, 0), ((twos, threes), _key, value) =>
             switch ((twos, threes), value) {
-            | ((0, _), 2) => (twos + 1, threes)
-            | ((_, 0), 3) => (twos, threes + 1)
+            | ((0, _), 2) => (1, threes)
+            | ((_, 0), 3) => (twos, 1)
             | _ => (twos, threes)
             }
           );
@@ -42,6 +43,44 @@ let checksum = l => {
   twoCount * threeCount;
 };
 
-let letters = _l => {
-  "wip"
+let rec part2 = l => {
+  let commonLetters = (l1, l2) => {
+    let rec aux = (innerl1, innerl2, acc, misses) =>
+      switch (misses) {
+      | 0
+      | 1 =>
+        switch (innerl1, innerl2) {
+        | ([], []) => Some(acc)
+        | ([], _)
+        | (_, []) => Js.Exn.raiseError("not same length")
+        | ([h1, ...t1], [h2, ...t2]) =>
+          if (h1 != h2) {
+            aux(t1, t2, acc, misses + 1);
+          } else {
+            aux(t1, t2, acc ++ h1, misses);
+          }
+        }
+      | _ => None
+      };
+    aux(l1, l2, "", 0);
+  };
+
+  let rec compareItemToList = (item, l) =>
+    switch (l) {
+    | [] => None
+    | [h, ...t] =>
+      switch (commonLetters(charList(item), charList(h))) {
+      | None => compareItemToList(item, t)
+      | Some(found) => Some(found)
+      }
+    };
+
+  switch (l) {
+  | [] => Js.Exn.raiseError("not found")
+  | [h, ...t] =>
+    switch (compareItemToList(h, t)) {
+    | None => part2(t)
+    | Some(found) => found
+    }
+  };
 };
