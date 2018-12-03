@@ -1,6 +1,3 @@
-let inputPath = Process.argv->Belt.Array.getExn(2);
-
-let data =
-  Fs.readFileSync(inputPath, Fs.ReadFile.Options.t(~encoding="utf-8"));
-
+let inputPath = Node.Process.argv->Belt.Array.getExn(2);
+let data = Node.Fs.readFileAsUtf8Sync(inputPath);
 Day2.parse(data)->Day2.part1->Js.log;
