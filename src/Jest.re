@@ -9,6 +9,11 @@ external describe:
 external test: (string, [@bs.uncurry] (unit => Js.undefined(unit))) => unit =
   "";
 
+[@bs.val]
+external testOnly:
+  (string, [@bs.uncurry] (unit => Js.undefined(unit))) => unit =
+  "test.only";
+
 module Expect = {
   type t;
   [@bs.send] external toBe: (t, 'a) => unit = "";
