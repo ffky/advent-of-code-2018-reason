@@ -16,6 +16,7 @@
     "bs-platform": "^4.0.7"
   },
   "dependencies": {
+    "date-fns": "^1.29.0",
     "jest": "^23.6.0"
   }
 }
