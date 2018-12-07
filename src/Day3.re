@@ -8,7 +8,7 @@ let parse = input =>
   ->Belt.List.keep(x => x != "")
   ->Belt.List.map(row => {
       let matches =
-        row |> Js.String.match([%re "/#(\\d) @ (\\d),(\\d): (\\d)x(\\d)/"]);
+        row |> Js.String.match([%re "/#(\\d*) @ (\\d*),(\\d*): (\\d*)x(\\d*)/"]);
       switch (matches) {
       | None => Js.Exn.raiseError("no matches")
       | Some(matches) =>
